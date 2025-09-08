@@ -91,7 +91,8 @@
     /* Bloques densos tipo “color field painting” */
     .field{
       position:absolute; filter:saturate(110%);
-      mix-blend-multiply; border-radius:30px;
+      mix-blend-mode:multiply; /* Cambiado de mix-blend-multiply a mix-blend-mode */
+      border-radius:30px;
       box-shadow:0 20px 60px rgba(0,0,0,.12);
       opacity:.9;
     }
@@ -100,7 +101,7 @@
     .f3{background:linear-gradient(180deg, var(--green-power), var(--green-deep)); width:22vw; height:32vw; right:18vw; bottom:-8vw; border-radius:40px;}
     /* Veladuras difusas para equilibrio */
     .glow{
-      position:absolute; border-radius:50%; filter:blur(60px); opacity:.45; mix-blend-soft-light;
+      position:absolute; border-radius:50%; filter:blur(60px); opacity:.45; mix-blend-mode:soft-light; /* Cambiado de mix-blend-soft-light a mix-blend-mode */
     }
     .g1{background:radial-gradient(closest-side, #2f5fff 40%, transparent 70%); width:35vw; height:35vw; left:10vw; top:20vh;}
     .g2{background:radial-gradient(closest-side, #ff7a00 40%, transparent 70%); width:28vw; height:28vw; right:6vw; top:12vh;}
@@ -111,14 +112,20 @@
       padding:32px; background:rgba(247,246,243,.6); backdrop-filter:blur(8px);
       border:1px solid rgba(0,0,0,.06); border-radius:var(--radius);
     }
+    .hero-inner h2 { /* Regla añadida para el tamaño de fuente del título del Hero */
+      font-size: 2.5rem; /* Ajusta este valor para el título */
+    }
+    .hero-inner .lead { /* Regla añadida para el tamaño de fuente de la explicación del Hero */
+      font-size: 1.0rem; /* Ajusta este valor para la explicación */
+    }
     .logo{
       width:120px; height:auto; opacity:.95; margin:0 auto 22px; display:block;
       image-rendering:auto;
     }
-    h2{
+    h2{ /* Mantenido para otros h2, pero sobreescrito por .hero-inner h2 en el hero */
       font-family:"Playfair Display", serif; font-size:var(--h1); letter-spacing:-.02em; margin:.2rem 0 1rem;
     }
-    .lead{
+    .lead{ /* Mantenido para otros .lead, pero sobreescrito por .hero-inner .lead en el hero */
       font-size:var(--lead); color:#3b3b3b; max-width:60ch; margin:0 auto 1.4rem;
     }
     .tag{
@@ -217,12 +224,46 @@
     }
 
     /* Responsive */
+    /* Media query general para pantallas pequeñas (hasta 960px) */
     @media (max-width: 960px){
-      .grid-2{grid-template-columns:1fr; gap:28px}
-      .cards{grid-template-columns:1fr}
-      .triptych{grid-template-columns:1fr}
-      .hero{min-height:82svh}
-      .f1,.f2,.f3{opacity:.8}
+      .container { padding: 0 18px; } /* Ajuste de padding para móviles */
+      .hero{min-height:75svh; padding:7rem 0 4rem;} /* Altura y padding del hero ajustados */
+      .hero-inner { padding: 24px; } /* Menor padding en el inner del hero */
+      .f1,.f2,.f3{opacity:.7; border-radius:20px;} /* Reducción de opacidad y radio para campos */
+      .glow { opacity: .3; filter: blur(40px); } /* Reducción de opacidad y blur para veladuras */
+
+      /* Ajuste de tamaños para campos y veladuras en móviles */
+      .f1{width:70vw; height:80vw; left:-20vw; top:-10vw;}
+      .f2{width:60vw; height:50vw; right:-15vw; top:15vw;}
+      .f3{width:40vw; height:60vw; right:-5vw; bottom:-10vw; border-radius:30px;}
+      .g1{width:60vw; height:60vw; left:-10vw; top:10vh;}
+      .g2{width:50vw; height:50vw; right:-10vw; top:5vh;}
+      .g3{width:40vw; height:40vw; right:-10vw; bottom:0vh;}
+
+      .grid-2{grid-template-columns:1fr; gap:28px} /* Columnas simples en móvil */
+      .cards{grid-template-columns:1fr} /* Cards en columna simple */
+      .triptych{grid-template-columns:1fr} /* Tríptico en columna simple */
+
+      section.block { padding: 4rem 0; } /* Padding de secciones reducido en móvil */
+      .color-bar { margin: 0 0 28px; } /* Margen de la barra de color */
+      .section-desc { margin: 0 0 1.5rem; } /* Margen de descripción de sección */
+
+      .fire { flex-direction: column; text-align: center; padding:18px; } /* Módulo fuego apilado en móvil */
+      .fire .icon { margin-bottom: 8px; } /* Margen para el icono del fuego */
+    }
+
+    /* Media query para móviles más pequeños (ej. 480px) */
+    @media (max-width: 480px) {
+        .head-inner { flex-direction: column; align-items: center; padding: 12px 0; } /* Header apilado */
+        .brand { margin-bottom: 12px; } /* Espacio bajo el brand */
+        .brand h1 { font-size: 1.2rem; }
+        .brand small { font-size: .65rem; }
+        .btn { padding: 8px 14px; font-size: .8rem; } /* Botones más pequeños */
+        .hero-cta { flex-direction: column; } /* Botones del hero apilados */
+        .hero-inner h2 { font-size: 2rem; } /* Título del hero aún más pequeño */
+        .hero-inner .lead { font-size: 0.9rem; } /* Explicación del hero aún más pequeña */
+        .logo { width: 100px; margin-bottom: 16px; } /* Logo más pequeño */
+        .section-title { font-size: var(--h2); } /* Asegura que h2 use la variable para adaptabilidad */
     }
   </style>
 </head>
@@ -254,8 +295,7 @@
       <h2 id="t-hero">El Dado Cabrón</h2>
       <p class="lead">
         Una partida en vivo para aprender a jugar con lo que la vida te da —y a veces con lo que te quita—.
-        Un gesto estoico y alegre que convierte cada tirada en elección y cada pausa en revelación.
-En esta ocasión, en el estudio de nuestro artista anfitrión para que su talento y el ambiente sirvan de inspiración creativa.
+        Un gesto estoico y alegre que convierte cada tirada en elección y cada pausa en revelación. En esa ocasión, además, nuestro artista anfitrión combinará su talento y nuestra presencia para desplegar su obra y ...
       </p>
       <div class="hero-cta">
         <a class="btn primary" href="#reserva">Reservar plaza</a>
@@ -286,6 +326,7 @@ En esta ocasión, en el estudio de nuestro artista anfitrión para que su talent
           <ul class="list">
             <li>Tirar el dado sin perder la calma.</li>
             <li>“Comer fichas” sin que te devoren las emociones.</li>
+            <li>Meditar de forma lúdica en medio del caos.</li>
             <li>Bloquear sin bloquear tu evolución.</li>
             <li>Ganar el bote… y lo vivido.</li>
           </ul>
@@ -363,7 +404,7 @@ En esta ocasión, en el estudio de nuestro artista anfitrión para que su talent
             </svg>
           </div>
           <h4>Breathe Tab</h4>
-          <p>Tu turno puede ser tirar el dado… o respirar. O ambas cosas.</p>
+          <p>Tu turno puede ser tirar el dado… o respirar conscientemente. O ambas cosas.</p>
         </div>
       </div>
 
